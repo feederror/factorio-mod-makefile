@@ -21,7 +21,7 @@ OUT_FILES := $(SED_FILES:%=$(OUTPUT_DIR)/%)
 SED_EXPRS := -e 's/{{MOD_NAME}}/$(PACKAGE_NAME)/g'
 SED_EXPRS += -e 's/{{VERSION}}/$(VERSION_STRING)/g'
 
-all: package
+all: run-tests package
 
 package-copy: $(PKG_DIRS) $(PKG_FILES)
 	mkdir -p $(OUTPUT_DIR)
@@ -43,3 +43,6 @@ package: package-copy $(OUT_FILES)
 
 clean:
 	rm -rf pkg/$(OUTPUT_NAME)
+
+run-tests:
+	find test -name '*test.lua' | tr '\n' '\0' | xargs -0 -n1 lua
